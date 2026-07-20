@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Formulario from './components/Formulario' // se importa componente para formulario
+import TablaObjetivos from './components/TablaObjetivos' //importacion de tabla 
 
 function App() {
   // Estado para almacenar la lista de misiones/objetivos (Nuestro futuro LocalStorage)
@@ -19,7 +20,9 @@ function App() {
       const misionConId = { ...nuevaMision, id: Date.now() }
       //guarda la misionm en la lista
       setObjetivos([...objetivos, misionConId])
-    
+      
+
+      //se limpian los campos de formulario
       setFormData({
         alias: '',
         recompensa: '',
@@ -42,7 +45,11 @@ function App() {
           <div className="card shadow-sm">
             <div className="card-body">
               <h5 className="card-title mb-3">Registrar Nuevo Objetivo</h5>
-              <p>Aquí construiremos el formulario...</p>
+              <Formulario 
+                formData={formData}
+                setFormData={setFormData}
+                onAgregarObjetivo={handleAgregarObjetivo}
+              />
             </div>
           </div>
         </section>
@@ -52,7 +59,9 @@ function App() {
           <div className="card shadow-sm">
             <div className="card-body">
               <h5 className="card-title mb-3">Panel de Capturas</h5>
-              <p>Aquí construiremos la tabla dinámica...</p>
+              <p className="text-muted mb-0">Total de misiones activas: <span className="badge bg-secondary">{objetivos.length}</span></p>
+              {/* Aquí inyectamos el componente y le pasamos el estado de nuestros objetivos */}
+              <TablaObjetivos objetivos={objetivos} />
             </div>
           </div>
         </section>

@@ -53,7 +53,7 @@ const Formulario = ({ formData, setFormData, onAgregarObjetivo }) => {
       </div>
       
       <button type="submit" className="btn btn-dark w-100 fw-bold">
-        🚀 Registrar Misión
+         Registrar Misión
       </button>
     </form>
   );
