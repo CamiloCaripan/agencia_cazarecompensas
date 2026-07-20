@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import Formulario from './components/Formulario' // se importa componente para formulario
 
 function App() {
   // Estado para almacenar la lista de misiones/objetivos (Nuestro futuro LocalStorage)
@@ -12,6 +13,21 @@ function App() {
     nivelPeligro: '', 
     ultimoPlaneta: ''
   })
+    // funcion para el formulario para una nueva mision de caza
+    const handleAgregarObjetivo = (nuevaMision) => {
+      // creacion de ID unico
+      const misionConId = { ...nuevaMision, id: Date.now() }
+      //guarda la misionm en la lista
+      setObjetivos([...objetivos, misionConId])
+    
+      setFormData({
+        alias: '',
+        recompensa: '',
+        nivelPeligro: '', 
+        ultimoPlaneta: ''
+      
+      })
+    };
 
   return (
     <div className="container mt-5">
