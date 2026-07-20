@@ -48,9 +48,13 @@ const Formulario = ({ formData, setFormData, onAgregarObjetivo, editandoId }) =>
         <input type="text" className="form-control" name="ultimoPlaneta" value={formData.ultimoPlaneta} onChange={handleChange} placeholder="Ej. Plutón" />
       </div>
       
-      {/* Botón dinámico según si estamos creando o editando */}
+      {/* Botón dinámico con iconos */}
       <button type="submit" className={`btn w-100 fw-bold ${editandoId ? 'btn-warning' : 'btn-dark'}`}>
-         {editandoId ? 'Actualizar Misión' : 'Registrar Misión'}
+         {editandoId ? (
+           <><i className="bi bi-arrow-clockwise me-2"></i>Actualizar Misión</>
+         ) : (
+           <><i className="bi bi-plus-circle me-2"></i>Registrar Misión</>
+         )}
       </button>
     </form>
   );

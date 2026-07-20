@@ -59,7 +59,7 @@ function App() {
         <p className="text-muted lead">Sistema central de registro y captura de criminales espaciales</p>
       </header>
 
-      {/* <-- NUEVO: Menú de navegación tipo pestañas --> */}
+      {/* Menú de navegación tipo pestañas con iconos */}
       <div className="d-flex justify-content-center mb-4">
         <div className="btn-group" role="group">
           <button 
@@ -67,14 +67,14 @@ function App() {
             className={`btn ${vistaActiva === 'crud' ? 'btn-dark' : 'btn-outline-dark'}`}
             onClick={() => setVistaActiva('crud')}
           >
-            📋 Operaciones (CRUD)
+            <i className="bi bi-card-checklist me-2"></i> Operaciones (CRUD)
           </button>
           <button 
             type="button" 
             className={`btn ${vistaActiva === 'api' ? 'btn-dark' : 'btn-outline-dark'}`}
             onClick={() => setVistaActiva('api')}
           >
-            📡 Base de Datos Federación (API)
+            <i className="bi bi-hdd-network me-2"></i> Base de Datos Federación (API)
           </button>
         </div>
       </div>
