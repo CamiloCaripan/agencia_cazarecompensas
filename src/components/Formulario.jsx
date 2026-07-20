@@ -1,8 +1,7 @@
 import React from 'react';
 
-const Formulario = ({ formData, setFormData, onAgregarObjetivo }) => {
+const Formulario = ({ formData, setFormData, onAgregarObjetivo, editandoId }) => {
 
-  // Función que captura lo que el usuario escribe y actualiza el estado en tiempo real
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -11,17 +10,14 @@ const Formulario = ({ formData, setFormData, onAgregarObjetivo }) => {
     });
   };
 
-  // Función que se ejecuta al darle click al botón "Registrar Misión"
   const handleSubmit = (e) => {
-    e.preventDefault(); // Evita que la página se recargue al enviar el formulario
+    e.preventDefault(); 
     
-    // Validación básica: que no hayan campos vacíos
     if (!formData.alias || !formData.recompensa || !formData.nivelPeligro || !formData.ultimoPlaneta) {
       alert('Por favor, completa todos los campos para registrar la misión.');
       return;
     }
 
-    // Enviamos los datos al componente padre (App.jsx)
     onAgregarObjetivo(formData);
   };
 
@@ -52,8 +48,9 @@ const Formulario = ({ formData, setFormData, onAgregarObjetivo }) => {
         <input type="text" className="form-control" name="ultimoPlaneta" value={formData.ultimoPlaneta} onChange={handleChange} placeholder="Ej. Plutón" />
       </div>
       
-      <button type="submit" className="btn btn-dark w-100 fw-bold">
-         Registrar Misión
+      {/* Botón dinámico según si estamos creando o editando */}
+      <button type="submit" className={`btn w-100 fw-bold ${editandoId ? 'btn-warning' : 'btn-dark'}`}>
+         {editandoId ? 'Actualizar Misión' : 'Registrar Misión'}
       </button>
     </form>
   );

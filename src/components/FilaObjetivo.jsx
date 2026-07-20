@@ -1,9 +1,7 @@
 import React from 'react';
 
-// Recibimos un "objetivo" individual a través de las props
-const FilaObjetivo = ({ objetivo }) => {
+const FilaObjetivo = ({ objetivo, onEliminar, onEditar }) => {
   
-  // Pequeña lógica para darle colores a la etiqueta de peligro usando Bootstrap
   const colorPeligro = 
     objetivo.nivelPeligro === 'Alto' ? 'bg-danger' : 
     objetivo.nivelPeligro === 'Medio' ? 'bg-warning text-dark' : 'bg-success';
@@ -19,11 +17,20 @@ const FilaObjetivo = ({ objetivo }) => {
       </td>
       <td>{objetivo.ultimoPlaneta}</td>
       <td>
-        {/* Dejamos los botones listos con iconos para la Fase 4 (Editar y Eliminar) */}
-        <button className="btn btn-sm btn-outline-primary me-2" title="Editar">
+        {/* Conectamos la función onEditar pasando el objeto completo */}
+        <button 
+          className="btn btn-sm btn-outline-primary me-2" 
+          title="Editar"
+          onClick={() => onEditar(objetivo)}
+        >
           Editar
         </button>
-        <button className="btn btn-sm btn-outline-danger" title="Eliminar">
+        {/* Conectamos la función onEliminar pasando solo el ID */}
+        <button 
+          className="btn btn-sm btn-outline-danger" 
+          title="Eliminar"
+          onClick={() => onEliminar(objetivo.id)}
+        >
           Eliminar
         </button>
       </td>

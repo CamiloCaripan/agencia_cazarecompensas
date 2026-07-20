@@ -1,14 +1,12 @@
 import React from 'react';
 import FilaObjetivo from './FilaObjetivo';
 
-// Recibimos la lista completa de "objetivos" a través de las props
-const TablaObjetivos = ({ objetivos }) => {
+const TablaObjetivos = ({ objetivos, onEliminar, onEditar }) => {
   
-  // Si no hay objetivos registrados, mostramos un mensaje amigable
   if (objetivos.length === 0) {
     return (
       <div className="alert alert-info text-center mt-4">
-        🛸 No hay misiones registradas actualmente. La galaxia está en paz.
+        No hay misiones registradas actualmente. La galaxia está en paz.
       </div>
     );
   }
@@ -26,9 +24,13 @@ const TablaObjetivos = ({ objetivos }) => {
           </tr>
         </thead>
         <tbody>
-          {/* Recorremos el arreglo de objetivos y por cada uno renderizamos el componente FilaObjetivo */}
           {objetivos.map((objetivo) => (
-            <FilaObjetivo key={objetivo.id} objetivo={objetivo} />
+            <FilaObjetivo 
+              key={objetivo.id} 
+              objetivo={objetivo} 
+              onEliminar={onEliminar}
+              onEditar={onEditar}
+            />
           ))}
         </tbody>
       </table>

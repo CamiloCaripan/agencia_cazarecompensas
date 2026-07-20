@@ -1,71 +1,117 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
-import Formulario from './components/Formulario' // se importa componente para formulario
-import TablaObjetivos from './components/TablaObjetivos' //importacion de tabla 
+import Formulario from './components/Formulario'
+import TablaObjetivos from './components/TablaObjetivos'
+import GaleriaCriminales from './components/GaleriaCriminales' // <-- NUEVO: Importamos el componente de la API
 
 function App() {
-  // Estado para almacenar la lista de misiones/objetivos (Nuestro futuro LocalStorage)
-  const [objetivos, setObjetivos] = useState([])
+  const [objetivos, setObjetivos] = useState(() => {
+    const misionesGuardadas = localStorage.getItem('misionesAgencia');
+    return misionesGuardadas ? JSON.parse(misionesGuardadas) : [];
+  });
 
-  
   const [formData, setFormData] = useState({
-    alias: '',
-    recompensa: '',
-    nivelPeligro: '', 
-    ultimoPlaneta: ''
-  })
-    // funcion para el formulario para una nueva mision de caza
-    const handleAgregarObjetivo = (nuevaMision) => {
-      // creacion de ID unico
-      const misionConId = { ...nuevaMision, id: Date.now() }
-      //guarda la misionm en la lista
-      setObjetivos([...objetivos, misionConId])
-      
+    alias: '', recompensa: '', nivelPeligro: '', ultimoPlaneta: ''
+  });
 
-      //se limpian los campos de formulario
-      setFormData({
-        alias: '',
-        recompensa: '',
-        nivelPeligro: '', 
-        ultimoPlaneta: ''
-      
-      })
-    };
+  const [editandoId, setEditandoId] = useState(null);
+  
+  // <-- NUEVO: Estado para controlar qué pantalla estamos viendo
+  const [vistaActiva, setVistaActiva] = useState('crud'); 
+
+  useEffect(() => {
+    localStorage.setItem('misionesAgencia', JSON.stringify(objetivos));
+  }, [objetivos]);
+
+  const handleAgregarObjetivo = (nuevaMision) => {
+    if (editandoId) {
+      const objetivosActualizados = objetivos.map(obj => 
+        obj.id === editandoId ? { ...nuevaMision, id: editandoId } : obj
+      );
+      setObjetivos(objetivosActualizados);
+      setEditandoId(null);
+    } else {
+      const misionConId = { ...nuevaMision, id: Date.now() }
+      setObjetivos([...objetivos, misionConId])
+    }
+    setFormData({ alias: '', recompensa: '', nivelPeligro: '', ultimoPlaneta: '' });
+  };
+
+  const eliminarObjetivo = (id) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar esta misión?')) {
+      const nuevosObjetivos = objetivos.filter(obj => obj.id !== id);
+      setObjetivos(nuevosObjetivos);
+    }
+  };
+
+  const editarObjetivo = (objetivo) => {
+    setFormData({
+      alias: objetivo.alias, recompensa: objetivo.recompensa, nivelPeligro: objetivo.nivelPeligro, ultimoPlaneta: objetivo.ultimoPlaneta
+    });
+    setEditandoId(objetivo.id);
+    setVistaActiva('crud'); // Si le da a editar, nos aseguramos de enviarlo a la vista del formulario
+  };
 
   return (
-    <div className="container mt-5">
-      <header className="text-center mb-5">
+    <div className="container mt-5 mb-5">
+      <header className="text-center mb-4">
         <h1 className="display-4 fw-bold">Agencia de Cazarrecompensas</h1>
         <p className="text-muted lead">Sistema central de registro y captura de criminales espaciales</p>
       </header>
 
-      <main className="row">
-        {/* Columna izquierda: Aquí irá nuestro componente de Formulario */}
-        <section className="col-md-4 mb-4">
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title mb-3">Registrar Nuevo Objetivo</h5>
-              <Formulario 
-                formData={formData}
-                setFormData={setFormData}
-                onAgregarObjetivo={handleAgregarObjetivo}
-              />
-            </div>
-          </div>
-        </section>
+      {/* <-- NUEVO: Menú de navegación tipo pestañas --> */}
+      <div className="d-flex justify-content-center mb-4">
+        <div className="btn-group" role="group">
+          <button 
+            type="button" 
+            className={`btn ${vistaActiva === 'crud' ? 'btn-dark' : 'btn-outline-dark'}`}
+            onClick={() => setVistaActiva('crud')}
+          >
+            📋 Operaciones (CRUD)
+          </button>
+          <button 
+            type="button" 
+            className={`btn ${vistaActiva === 'api' ? 'btn-dark' : 'btn-outline-dark'}`}
+            onClick={() => setVistaActiva('api')}
+          >
+            📡 Base de Datos Federación (API)
+          </button>
+        </div>
+      </div>
 
-        {/* Columna derecha: Aquí irá nuestro componente de Tabla Dinámica */}
-        <section className="col-md-8">
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title mb-3">Panel de Capturas</h5>
-              <p className="text-muted mb-0">Total de misiones activas: <span className="badge bg-secondary">{objetivos.length}</span></p>
-              {/* Aquí inyectamos el componente y le pasamos el estado de nuestros objetivos */}
-              <TablaObjetivos objetivos={objetivos} />
+      {/* <-- NUEVO: Renderizado condicional de las vistas --> */}
+      {vistaActiva === 'crud' ? (
+        <main className="row">
+          <section className="col-md-4 mb-4">
+            <div className="card shadow-sm border-0 bg-light">
+              <div className="card-body">
+                <h5 className="card-title mb-3 fw-bold text-primary">
+                  {editandoId ? 'Actualizar Objetivo' : 'Registrar Nuevo Objetivo'}
+                </h5>
+                <Formulario 
+                  formData={formData} setFormData={setFormData} onAgregarObjetivo={handleAgregarObjetivo} editandoId={editandoId} 
+                />
+              </div>
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
+
+          <section className="col-md-8">
+            <div className="card shadow-sm border-0">
+              <div className="card-body">
+                <h5 className="card-title mb-3 fw-bold">Panel de Capturas</h5>
+                <p className="text-muted mb-0">Total de misiones activas: <span className="badge bg-secondary">{objetivos.length}</span></p>
+                <TablaObjetivos 
+                  objetivos={objetivos} onEliminar={eliminarObjetivo} onEditar={editarObjetivo} 
+                />
+              </div>
+            </div>
+          </section>
+        </main>
+      ) : (
+        /* Renderizamos el componente de la API si la vista activa es 'api' */
+        <GaleriaCriminales />
+      )}
+
     </div>
   )
 }
