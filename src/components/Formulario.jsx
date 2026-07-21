@@ -24,17 +24,17 @@ const Formulario = ({ formData, setFormData, onAgregarObjetivo, editandoId }) =>
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
-        <label className="form-label fw-bold">Alias del Objetivo</label>
+        <label className="form-label fw-bold small">Alias del Objetivo</label>
         <input type="text" className="form-control" name="alias" value={formData.alias} onChange={handleChange} placeholder="Ej. Rey Flippy Nips" />
       </div>
       
       <div className="mb-3">
-        <label className="form-label fw-bold">Recompensa (Flurbos)</label>
+        <label className="form-label fw-bold small">Recompensa (Flurbos)</label>
         <input type="number" className="form-control" name="recompensa" value={formData.recompensa} onChange={handleChange} placeholder="Ej. 5000" />
       </div>
       
       <div className="mb-3">
-        <label className="form-label fw-bold">Nivel de Peligro</label>
+        <label className="form-label fw-bold small">Nivel de Peligro</label>
         <select className="form-select" name="nivelPeligro" value={formData.nivelPeligro} onChange={handleChange}>
           <option value="">Selecciona un nivel...</option>
           <option value="Bajo">Bajo (Inofensivo)</option>
@@ -44,12 +44,15 @@ const Formulario = ({ formData, setFormData, onAgregarObjetivo, editandoId }) =>
       </div>
       
       <div className="mb-3">
-        <label className="form-label fw-bold">Último Planeta Visto</label>
+        <label className="form-label fw-bold small">Último Planeta Visto</label>
         <input type="text" className="form-control" name="ultimoPlaneta" value={formData.ultimoPlaneta} onChange={handleChange} placeholder="Ej. Plutón" />
       </div>
       
-      {/* Botón dinámico con iconos */}
-      <button type="submit" className={`btn w-100 fw-bold ${editandoId ? 'btn-warning' : 'btn-dark'}`}>
+      {/* BOTÓN ACTUALIZADO: Ahora resalta por completo y no se confunde con los inputs */}
+      <button 
+        type="submit" 
+        className={`btn w-100 btn-submit-notion mt-2 shadow-sm ${editandoId ? 'btn-edit-mode' : 'btn-create-mode'}`}
+      >
          {editandoId ? (
            <><i className="bi bi-arrow-clockwise me-2"></i>Actualizar Misión</>
          ) : (

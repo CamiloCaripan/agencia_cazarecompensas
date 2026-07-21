@@ -13,7 +13,7 @@ const TablaObjetivos = ({ objetivos, onEliminar, onEditar }) => {
 
   return (
     <div className="table-responsive mt-3">
-      <table className="table table-dark table-hover table-striped align-middle">
+      <table className="table table-hover align-middle bg-transparent">
         <thead className="table-dark">
           <tr>
             <th>Alias del Objetivo</th>

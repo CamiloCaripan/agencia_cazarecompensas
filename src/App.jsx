@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Formulario from './components/Formulario'
 import TablaObjetivos from './components/TablaObjetivos'
-import GaleriaCriminales from './components/GaleriaCriminales' // <-- NUEVO: Importamos el componente de la API
+import GaleriaCriminales from './components/GaleriaCriminales'
 
 function App() {
   const [objetivos, setObjetivos] = useState(() => {
@@ -15,13 +15,26 @@ function App() {
   });
 
   const [editandoId, setEditandoId] = useState(null);
-  
-  // <-- NUEVO: Estado para controlar qué pantalla estamos viendo
   const [vistaActiva, setVistaActiva] = useState('crud'); 
 
+  // <-- NUEVO: Estado para el Tema (leemos si ya había elegido uno antes, sino por defecto "light")
+  const [tema, setTema] = useState(() => localStorage.getItem('agenciaTema') || 'light');
+
+  // Guardar datos
   useEffect(() => {
     localStorage.setItem('misionesAgencia', JSON.stringify(objetivos));
   }, [objetivos]);
+
+  // <-- NUEVO: Aplicar el tema al HTML cada vez que cambie
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', tema);
+    localStorage.setItem('agenciaTema', tema);
+  }, [tema]);
+
+  // Función para alternar el tema
+  const toggleTema = () => {
+    setTema(tema === 'light' ? 'dark' : 'light');
+  };
 
   const handleAgregarObjetivo = (nuevaMision) => {
     if (editandoId) {
@@ -49,72 +62,76 @@ function App() {
       alias: objetivo.alias, recompensa: objetivo.recompensa, nivelPeligro: objetivo.nivelPeligro, ultimoPlaneta: objetivo.ultimoPlaneta
     });
     setEditandoId(objetivo.id);
-    setVistaActiva('crud'); // Si le da a editar, nos aseguramos de enviarlo a la vista del formulario
+    setVistaActiva('crud');
   };
 
   return (
-    <div className="container mt-5 mb-5">
-      <header className="text-center mb-4 pt-4">
-        <h1 className="display-4 title-glow">
-          <i className="bi me-2"></i>Agencia de Cazarrecompensas
-        </h1>
-        <p className="text-light-muted lead">Sistema central de registro y captura de criminales espaciales</p>
-      </header>
+    <>
+      {/* <-- NUEVO: Botón de tema y Portada estilo Notion --> */}
+      <button className="theme-toggle-btn shadow-sm" onClick={toggleTema}>
+        {tema === 'light' ? <><i className="bi bi-moon-stars-fill text-dark me-2"></i>Modo Oscuro</> : <><i className="bi bi-sun-fill text-warning me-2"></i>Modo Claro</>}
+      </button>
+      
+      <div className="notion-cover"></div>
 
-      {/* Menú de navegación tipo pestañas con iconos */}
-      <div className="d-flex justify-content-center mb-4">
-        <div className="btn-group" role="group">
-          <button 
-            type="button" 
-            className={`btn ${vistaActiva === 'crud' ? 'btn-dark' : 'btn-outline-dark'}`}
-            onClick={() => setVistaActiva('crud')}
-          >
-            <i className="bi bi-card-checklist me-2"></i> Operaciones (CRUD)
-          </button>
-          <button 
-            type="button" 
-            className={`btn ${vistaActiva === 'api' ? 'btn-dark' : 'btn-outline-dark'}`}
-            onClick={() => setVistaActiva('api')}
-          >
-            <i className="bi bi-hdd-network me-2"></i> Base de Datos Federación (API)
-          </button>
+      <div className="notion-container">
+        <header className="notion-header mb-4">
+          {/* Cambiamos 'title-glow' por 'title-notion' */}
+          <h1 className="display-5 title-notion">Agencia de Cazarrecompensas</h1>
+          <p className="text-notion-muted fs-5">Sistema central de registro y captura espacial.</p>
+        </header>
+
+        <div className="d-flex justify-content-start mb-5 border-bottom pb-3">
+          <div className="btn-group" role="group">
+            <button 
+              type="button" 
+              className={`btn ${vistaActiva === 'crud' ? 'btn-dark' : 'btn-outline-secondary border-0'}`}
+              onClick={() => setVistaActiva('crud')}
+            >
+              <i className="bi bi-card-checklist me-2"></i> Operaciones
+            </button>
+            <button 
+              type="button" 
+              className={`btn ${vistaActiva === 'api' ? 'btn-dark' : 'btn-outline-secondary border-0'}`}
+              onClick={() => setVistaActiva('api')}
+            >
+              <i className="bi bi-hdd-network me-2"></i> Base de Datos (API)
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* <-- NUEVO: Renderizado condicional de las vistas --> */}
-      {vistaActiva === 'crud' ? (
-        <main className="row">
-          <section className="col-md-4 mb-4">
-            <div className="card glass-card shadow-lg border-0">
-              <div className="card-body p-4">
-                <h5 className="card-title mb-3 fw-bold text-info">
+        {vistaActiva === 'crud' ? (
+          <main className="row">
+            {/* <-- NUEVO: Cambiamos col-md-4 a col-12 para apilar arriba --> */}
+            <section className="col-12 mb-5">
+              <div className="notion-card">
+                <h4 className="mb-4 fw-bold">
                   {editandoId ? 'Actualizar Objetivo' : 'Registrar Nuevo Objetivo'}
-                </h5>
+                </h4>
                 <Formulario 
                   formData={formData} setFormData={setFormData} onAgregarObjetivo={handleAgregarObjetivo} editandoId={editandoId} 
                 />
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="col-md-8">
-            <div className="card glass-card shadow-lg border-0">
-              <div className="card-body p-4">
-                <h5 className="card-title mb-3 fw-bold text-info">Panel de Capturas</h5>
-                <p className="text-light-muted mb-0">Total de misiones activas: <span className="badge bg-primary">{objetivos.length}</span></p>
+            {/* <-- NUEVO: Cambiamos col-md-8 a col-12 para apilar abajo --> */}
+            <section className="col-12">
+              <div className="notion-card">
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                  <h4 className="fw-bold mb-0">Panel de Capturas</h4>
+                  <span className="badge bg-secondary rounded-pill px-3 py-2">{objetivos.length} Misiones</span>
+                </div>
                 <TablaObjetivos 
                   objetivos={objetivos} onEliminar={eliminarObjetivo} onEditar={editarObjetivo} 
                 />
               </div>
-            </div>
-          </section>
-        </main>
-      ) : (
-        /* Renderizamos el componente de la API si la vista activa es 'api' */
-        <GaleriaCriminales />
-      )}
-
-    </div>
+            </section>
+          </main>
+        ) : (
+          <GaleriaCriminales />
+        )}
+      </div>
+    </>
   )
 }
 
