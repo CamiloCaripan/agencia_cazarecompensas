@@ -1,16 +1,29 @@
-# React + Vite
+# Agencia de Cazarrecompensas Espaciales
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Aplicación web desarrollada con React y Vite. Incluye operaciones CRUD con persistencia en LocalStorage, consumo de la API de Rick and Morty y diseño moderno con modo oscuro/claro (Estilo Notion/Glassmorphism).
 
-Currently, two official plugins are available:
+## 🚀 Instrucciones de Instalación y Ejecución
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Para correr este proyecto localmente, sigue estos pasos:
 
-## React Compiler
+1. Clona este repositorio:
+   -bash
+   git clone <URL DEL RESPOSITORIO>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. cd mi--app
 
-## Expanding the Oxlint configuration
+2. instalar dependencias necesarias
+npm install
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+
+
+#Tecnologías utilizadas
+React (Hooks: useState, useEffect)
+
+Vite
+
+Bootstrap y Bootstrap Icons
+
+CSS Custom Properties (Variables para modo oscuro/claro)
+
+Rick and Morty API (Fetch)
