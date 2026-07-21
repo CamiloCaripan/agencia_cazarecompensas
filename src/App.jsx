@@ -65,6 +65,22 @@ function App() {
     setVistaActiva('crud');
   };
 
+  // <-- NUEVO: Función puente entre la API y el Formulario
+  const prepararMisionDesdeAPI = (personaje) => {
+    // Rellenamos el formulario con los datos que sabemos, y dejamos vacíos los que faltan
+    setFormData({
+      alias: personaje.name,
+      recompensa: '', // El usuario lo llenará
+      nivelPeligro: '', // El usuario lo llenará
+      ultimoPlaneta: personaje.origin.name === 'unknown' ? 'Desconocido' : personaje.origin.name
+    });
+    setEditandoId(null); // Nos aseguramos de estar en modo "Crear" y no "Editar"
+    setVistaActiva('crud'); // Cambiamos a la pestaña del formulario automáticamente
+    
+    // Hacemos un scroll suave hacia arriba para que el usuario vea el formulario listo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
       {/* <-- NUEVO: Botón de tema y Portada estilo Notion --> */}
@@ -128,7 +144,7 @@ function App() {
             </section>
           </main>
         ) : (
-          <GaleriaCriminales />
+          <GaleriaCriminales onSeleccionarCriminal={prepararMisionDesdeAPI} />
         )}
       </div>
     </>
