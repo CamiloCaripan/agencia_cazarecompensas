@@ -54,9 +54,11 @@ function App() {
 
   return (
     <div className="container mt-5 mb-5">
-      <header className="text-center mb-4">
-        <h1 className="display-4 fw-bold">Agencia de Cazarrecompensas</h1>
-        <p className="text-muted lead">Sistema central de registro y captura de criminales espaciales</p>
+      <header className="text-center mb-4 pt-4">
+        <h1 className="display-4 title-glow">
+          <i className="bi me-2"></i>Agencia de Cazarrecompensas
+        </h1>
+        <p className="text-light-muted lead">Sistema central de registro y captura de criminales espaciales</p>
       </header>
 
       {/* Menú de navegación tipo pestañas con iconos */}
@@ -83,9 +85,9 @@ function App() {
       {vistaActiva === 'crud' ? (
         <main className="row">
           <section className="col-md-4 mb-4">
-            <div className="card shadow-sm border-0 bg-light">
-              <div className="card-body">
-                <h5 className="card-title mb-3 fw-bold text-primary">
+            <div className="card glass-card shadow-lg border-0">
+              <div className="card-body p-4">
+                <h5 className="card-title mb-3 fw-bold text-info">
                   {editandoId ? 'Actualizar Objetivo' : 'Registrar Nuevo Objetivo'}
                 </h5>
                 <Formulario 
@@ -96,10 +98,10 @@ function App() {
           </section>
 
           <section className="col-md-8">
-            <div className="card shadow-sm border-0">
-              <div className="card-body">
-                <h5 className="card-title mb-3 fw-bold">Panel de Capturas</h5>
-                <p className="text-muted mb-0">Total de misiones activas: <span className="badge bg-secondary">{objetivos.length}</span></p>
+            <div className="card glass-card shadow-lg border-0">
+              <div className="card-body p-4">
+                <h5 className="card-title mb-3 fw-bold text-info">Panel de Capturas</h5>
+                <p className="text-light-muted mb-0">Total de misiones activas: <span className="badge bg-primary">{objetivos.length}</span></p>
                 <TablaObjetivos 
                   objetivos={objetivos} onEliminar={eliminarObjetivo} onEditar={editarObjetivo} 
                 />
